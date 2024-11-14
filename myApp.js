@@ -6,9 +6,9 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 let Person;
 
 const personSchema = new mongoose.Schema({
-  name:String,
+  name: String,
   age: Number,
-  favoriteFoods:[String]
+  favoriteFoods: [String]
 });
 
 Person = mongoose.model('Person', personSchema);
@@ -16,15 +16,28 @@ Person = mongoose.model('Person', personSchema);
 
 
 const createAndSavePerson = (done) => {
-  let person = new Person({name:"Eteban Carrillo",age:28,favoriteFoods:["eggs", "fish", "fresh fruit"]})
-  person.save(function(err, data) {
+  let person = new Person({ name: "Eteban Carrillo", age: 28, favoriteFoods: ["eggs", "fish", "fresh fruit"] })
+  person.save(function (err, data) {
     if (err) return console.error(err);
     done(null, data)
   });
 };
 
+const arrayOfPeople = [{
+  name: "pepito",
+  age: 12,
+  favoriteFoods: ["fish", "bread"]
+}, {
+  name: "Nadia",
+  age: 18,
+  favoriteFoods: ["fish", "bread", "rise"]
+}]
+
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+  Person.create(arrayOfPeople, function (err, people) {
+    if (err) return console.log(err);
+    done(null, people);
+  });
 };
 
 const findPeopleByName = (personName, done) => {
